@@ -61,7 +61,7 @@ def generate_primes(k):
         prime2 = generate_prime(minimum,maximum)
         # if you are really lucky, try again
         if prime1 != prime2:
-            return [prime1,prime2]
+            return (prime1,prime2)
 
 def generate_prime(m,M):
     while True:
@@ -83,12 +83,16 @@ def gcd(a,b):
 def lcm(a,b):
     return a*b / gcd(a,b)
 
-def prime_lcm(p.q):
+def prime_lcm(p,q):
     """Be careful. p, q are prime to use this function"""
-    return (p-1)(q-1)
+    return (p-1)*(q-1)
 
 def extendEuclid(a,b):
-    """find the integers x,y such that xa + yb = gcd(a,b)"""
+    flag = False
+    if a < b:
+        a ,b = b, a
+        flag = True
+    """find the integers x,y such that xa + yb = 1"""
     if b == 0:
         x = 1
         y = 0
@@ -96,7 +100,11 @@ def extendEuclid(a,b):
         # e = 1 << 16 +1
         q = a/b
         r = a%b
-        (u,v) = gcd(b,r)
-        x = u
+        (u,v) = extendEuclid(b,r)
+        x = v
         y = u - q*v
+    if flag:
+        return (y,x)
     return (x,y)
+
+# print extendEuclid(13,5)
