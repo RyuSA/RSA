@@ -1,11 +1,11 @@
 #coding:utf-8
 import random
 
-def is_prime(n):
+def MillerRabin(n):
     # Miller–Rabin primality test
     # if p is even or minus, return False
-    # we don't need 2
-    if not n&1 or n < 0:
+    # ignore 1 and 2
+    if (not n&1) or (n < 0):
         return False
 
     # n = 2^s * d + 1
@@ -18,10 +18,11 @@ def is_prime(n):
         s += 1
 
     # this number is related to sucsess probability
-    times = 20
+    # probability ~ (25%)^times
+    times = 10
 
     for i in xrange(times):
-        # flag will be used for line 40
+        # flag will be used for line 43
         flag = True
         # b is a base
         b = random.randint(2,n-1)
@@ -45,6 +46,24 @@ def is_prime(n):
 
     # pass times times text, this n may be prime number
     return True
+
+def isPrime(n):
+    """Miller Rabin Test -> trial division"""
+    # if n is 2 or 3, return True
+    if n == 1:
+        return False
+    if n == 2 or n == 3:
+        return True
+    if MillerRabin(n):
+        # n is MAYBE prime number
+        Upper = int(pow(n,0.5))
+        for i in xrange(5,Upper,6):
+            if n%i == 0 or n%(i+2) == 0:
+                return False
+        del Upper
+        return True
+    return False
+
 
 def generate_primes(k):
     # if k is small, it is not good for RSA
@@ -88,11 +107,11 @@ def prime_lcm(p,q):
     return (p-1)*(q-1)
 
 def extendEuclid(a,b):
+    """find the integers x,y such that xa + yb = 1"""
     flag = False
     if a < b:
         a ,b = b, a
         flag = True
-    """find the integers x,y such that xa + yb = 1"""
     if b == 0:
         x = 1
         y = 0
@@ -107,4 +126,4 @@ def extendEuclid(a,b):
         return (y,x)
     return (x,y)
 
-# print extendEuclid(13,5)
+print isPrime(9999991),isPrime(9999991),isPrime(9999991)
